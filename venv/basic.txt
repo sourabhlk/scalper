@@ -1,0 +1,3 @@
+xlrd
+xlsxwriter
+pandas

@@ -1,0 +1,221 @@
+Metadata-Version: 2.1
+Name: pycookiecheat
+Version: 0.4.5
+Summary: Borrow cookies from your browser's authenticated session foruse in Python scripts.
+Home-page: https://github.com/n8henrie/pycookiecheat
+Author: Nathan Henrie
+Author-email: nate@n8henrie.com
+License: MIT
+Keywords: pycookiecheat chrome cookies
+Platform: UNKNOWN
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Description-Content-Type: text/markdown
+Requires-Dist: cryptography (==2.7)
+Requires-Dist: keyring (==19.1.0)
+Provides-Extra: dev
+Requires-Dist: twine (==1.13.0) ; extra == 'dev'
+Requires-Dist: wheel (==0.33.6) ; extra == 'dev'
+Requires-Dist: flake8-docstrings (==1.4.0) ; extra == 'dev'
+Requires-Dist: flake8-import-order (==0.18.1) ; extra == 'dev'
+Requires-Dist: flake8 (==3.7.8) ; extra == 'dev'
+Requires-Dist: mypy (==0.720) ; extra == 'dev'
+Requires-Dist: pep8-naming (==0.8.2) ; extra == 'dev'
+Requires-Dist: pycodestyle (==2.5.0) ; extra == 'dev'
+Requires-Dist: pylint (==2.3.1) ; extra == 'dev'
+Requires-Dist: pytest (==5.1.2) ; extra == 'dev'
+Requires-Dist: tox (==3.14.0) ; extra == 'dev'
+
+# pycookiecheat
+
+[![Build
+Status](https://travis-ci.org/n8henrie/pycookiecheat.svg?branch=master)](https://travis-ci.org/n8henrie/pycookiecheat)
+
+Borrow cookies from your browser's authenticated session for use in Python
+scripts.
+
+-   Free software: MIT
+-   Documentation: http://n8h.me/HufI1w
+
+## Installation
+
+**NB:** Use `pip` and `python` instead of `pip3` and `python3` if you're still
+on Python 2 and using pycookiecheat < v0.4.0. pycookiecheat >= v0.4.0 requires
+Python 3.5+, and may soon go to 3.6+.
+
+- `pip3 install pycookiecheat`
+
+### Installation notes regarding alternative keyrings on Linux
+
+See [#12](https://github.com/n8henrie/pycookiecheat/issues/12). Chrome is now
+using a few different keyrings to store your `Chrome Safe Storage` password,
+instead of a hard-coded password. Pycookiecheat doesn't work with most of these
+so far, and to be honest my enthusiasm for adding support for ones I don't use
+is limited. However, users have contributed code that seems to work with some
+of the recent Ubuntu desktops. To get it working, you may have to `sudo apt-get
+install libsecret-1-dev python-gi python3-gi`, and if you're installing into a
+virtualenv (highly recommended), you need to use the `--system-site-packages`
+flag to get access to the necessary libraries.
+
+Alternatively, some users have suggested running Chrome with the
+`--password-store=basic` or `--use-mock-keychain` flags.
+
+### Development Setup
+
+1. `git clone https://github.com/n8henrie/pycookiecheat.git`
+1. `cd pycookiecheat`
+1. `python3 -m venv venv`
+1. `venv/bin/pip install -e .[dev]`
+
+## Usage
+
+```python
+from pycookiecheat import chrome_cookies
+import requests
+
+url = 'http://example.com/fake.html'
+
+# Uses Chrome's default cookies filepath by default
+cookies = chrome_cookies(url)
+r = requests.get(url, cookies=cookies)
+```
+
+Use the `cookie_file` keyword-argument to specify a different filepath for the
+cookies-file: `chrome_cookies(url, cookie_file='/abspath/to/cookies')`
+
+Keep in mind that pycookiecheat defaults to looking for cookies for
+Chromium, not Google Chrome, so if you're using the latter, you'll need to
+manually specify something like
+`"/home/username/.config/google-chrome/Default/Cookies"` as your `cookie_file`.
+
+## Features
+
+- Returns decrypted cookies from Google Chrome on OSX or Linux.
+- Optionally outputs cookies to file (thanks to Muntashir Al-Islam!)
+
+## FAQ / Troubleshooting
+
+### How about Windows?
+
+I don't use Windows or have a PC, so I won't be adding support myself. Feel
+free to make a PR :)
+
+### I get an installation error with the `cryptography` module on OS X
+(pycookiecheat <v0.4.0)
+
+If you're getting [this
+error](https://github.com/n8henrie/pycookiecheat/pull/11#issuecomment-221918807)
+and using Homebrew, then you need to follow the instructions for [Building
+cryptography on OS
+X](https://cryptography.io/en/latest/installation/?highlight=cflags#building-cryptography-on-os-x)
+and `export LDFLAGS="-L$(brew --prefix openssl)/lib" CFLAGS="-I$(brew --prefix
+openssl)/include"` and try again.
+
+### I get an installation error with the `cryptography` module on Linux
+
+Please check the official cryptography docs. On some systems (e.g. Ubuntu), you
+may need to do something like `sudo apt-get install build-essential libssl-dev
+libffi-dev python-dev` prior to installing with `pip`.
+
+### How can I use pycookiecheat on KDE-based Linux distros?
+
+On KDE, Chrome defaults to using KDE's own keyring, KWallet. For pycookiecheat to support KWallet the [`dbus-python`](https://pypi.org/project/dbus-python/) package must be installed.
+
+### How do I install the dev branch with pip?
+
+- `pip install git+https://github.com/n8henrie/pycookiecheat@dev`
+
+## Buy Me a Coffee
+
+[☕️](https://n8henrie.com/donate)
+
+
+# [Changelog](https://keepachangelog.com)
+
+## v0.4.5 :: 20191007
+
+- db6ac6d Go back to using cryptography due to
+  https://www.cvedetails.com/cve/CVE-2013-7459/
+- c70ad51 Allow users to override password (thanks @alairock)
+
+## v0.4.4 :: 20180706
+
+- Optionally outputs cookies to a file compatible with cURL (thanks to
+  Muntashir Al-Islam!)
+
+## v0.4.3 :: 20170627
+
+- Consistently use Chrome as default across platforms, allow user to specify
+  Chromium as desired (thanks @jtbraun)
+
+## v0.4.0 :: 20170504
+
+- Remove compatibility for Python <3.5
+- Add type hints
+- Refactor for smaller functions
+- Expand docstrings
+- Revert from `cryptography` back to `PyCrypto` and `hashlib` for easier
+  installation.
+
+## v0.3.4 :: 20170414
+
+- Add support for new Ubuntu keyring / libsecret
+  - See <https://github.com/n8henrie/pycookiecheat/issues/12> for details
+  - Many thanks to @stat1c1c3au and @trideceth12 for contributions
+
+## 0.3.0
+
+- Use [`cryptography`](https://cryptography.io/en/latest/) instead of
+  `pycrypto` (thanks to [Taik](https://github.com/Taik)!)
+  - Seems to be [significantly
+    faster](https://github.com/n8henrie/pycookiecheat/pull/11#issuecomment-221950400)
+  - Works with PyPy >= 2.6.0 (no support for PyPy3 yet)
+
+## 0.2.0
+
+- Fix domain and subdomain matching
+- Make SQL query more secure by avoiding string formatting
+- Many thanks to [Brandon Rhodes](https://github.com/brandon-rhodes) for 24c4234 !
+
+## 0.1.10
+
+- Read version to separate file so it can be imported in setup.py
+- Bugfix for python2 on linux
+
+## 0.1.9
+
+- Bugfix for python2 on linux
+
+## 0.1.8
+
+- Python2 support (thanks [dani14-96](https://github.com/dani14-96))
+
+## 0.1.7
+
+- Configurable cookies file (thanks [ankostis](https://github.com/ankostis))
+
+## 0.1.6
+
+- OSError instead of Exception for wrong OS.
+- Moved testing requirements to tox and travis-ci files.
+
+## 0.1.5
+
+- Updated to work better with PyPI's lack of markdown support
+- Working on tox and travis-ci integration
+- Added a few basic tests that should pass if one has Chrome installed and has visited my site (n8henrie.com)
+- Added sys.exit(0) if cookie_file not found so tests pass on travis-ci.
+
+## 0.1.0 (2015-02-25)
+
+- First release on PyPI.
+
+## Prior changelog from Gist
+
+- 20150221 v2.0.1: Now should find cookies for base domain and all subs.
+- 20140518 v2.0: Now works with Chrome's new encrypted cookies.
+
+

@@ -3,7 +3,7 @@ import pandas as pd
 from pandas.tseries.offsets import BDay
 from datetime import date
 import subprocess
-from getDatabackup import telegram_bot_sendtext
+# from getDatabackup import telegram_bot_sendtext
 import datetime
 from math import ceil
 import numpy
@@ -60,11 +60,11 @@ def telegram_bot_sendHtml(bot_message):
 
 def telegram_bot_sendtext(bot_message):
     bot_token = '1175180677:AAEFb1hxCYXcQhq0DAiuJcoNfwgbLpT1RdQ'
-    bot_chatID = '-1001380413685'
+    bot_chatID = '-1001168164977'
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message.replace('},','\n\t')
 
     response = requests.get(send_text)
-    # print(response)
+    print(response)
     return response.json()
 
 def render_mpl_table(data, col_width=4.0, row_height=0.625, font_size=14,
@@ -223,7 +223,11 @@ def get_shareholder_value(symbol, shareholding_df, lookup_df):
 # Long/Short ratio
 def longShort():
     # lsUrl = "https://archives.nseindia.com/content/nsccl/fao_participant_oi_27112020.csv"
-    url = "https://archives.nseindia.com/content/nsccl/fao_participant_oi_"+datetime.date.today().strftime("%d%m%Y")+".csv"
+    today = datetime.date.today()
+    offset = max(1, (today.weekday() + 6) % 7 - 3)
+    timedelta = datetime.timedelta(offset)
+    getLastBussinessDay = today - timedelta
+    url = "https://archives.nseindia.com/content/nsccl/fao_participant_oi_"+getLastBussinessDay.strftime("%d%m%Y")+".csv"
     lsDf = pd.read_csv(url)
     lsDf.columns = lsDf.iloc[0]
     lsDf = lsDf.loc[lsDf['Client Type'] == 'FII']
@@ -310,7 +314,7 @@ working_df = working_df.rename(columns={'symbol': 'Company','secVal':'Security',
 
 renderImg = render_mpl_table(working_df, header_columns=0, col_width=3.0)
 renderImg.get_figure().savefig('swing.png')
-send_image('1175180677:AAEFb1hxCYXcQhq0DAiuJcoNfwgbLpT1RdQ','swing.png','-1001168164977')
+sendImg = send_image('1175180677:AAEFb1hxCYXcQhq0DAiuJcoNfwgbLpT1RdQ','swing.png','-1001168164977')
 longToShortRatio = longShort()
 telegram_bot_sendtext("longToShortRatio: "+str(longToShortRatio))
 

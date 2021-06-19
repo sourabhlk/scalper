@@ -57,9 +57,13 @@ headers = {
 }
 
 url_oc = "https://www.nseindia.com/option-chain"
-session = requests.Session()
-request = session.get(url_oc, headers=headers, timeout=10)
-cookies = dict(request.cookies)
+cookies = {}
+try:
+    session = requests.Session()
+    request = session.get(url_oc, headers=headers, timeout=10)
+    cookies = dict(request.cookies)
+except Exception as e:
+    print(str(e))
 
 # List of stocks to be watched
 

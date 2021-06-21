@@ -18,7 +18,7 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-SERVICE_ACCOUNT_FILE = 'keys.json'
+SERVICE_ACCOUNT_FILE = '/tmp/keys.json'
 
 credentials = None
 credentials = service_account.Credentials.from_service_account_file(
@@ -513,19 +513,19 @@ def telegram_bot_sendMonthlyCommStock(bot_message):
 def runLiveStock():
     while True:
         liveStock()
-        time.sleep(240)
+        time.sleep(300)
         print("Running LiveStock")
 
 def runOptionChain():
     while True:
         option_chain()
-        time.sleep(240)
+        time.sleep(300)
         print("Running OptionChain")
 
 def runCommForAll():
     while True:
         runCommodities()
-        time.sleep(240)
+        time.sleep(300)
         print("Running Commodity")
 
 

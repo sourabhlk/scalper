@@ -18,7 +18,7 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-SERVICE_ACCOUNT_FILE = '/tmp/keys.json'
+SERVICE_ACCOUNT_FILE = '/home/iamslk94/keys.json'
 
 credentials = None
 credentials = service_account.Credentials.from_service_account_file(
@@ -79,7 +79,7 @@ sectorStocks = {'NIFTYAUTO': {'BAJA':{},'EXID':{},'BLKI':{},'BFRG':{},'MRTI':{},
 
 indicesCPR = {'Nifty 50':{},'Nifty Bank':{},'Nifty Financial Services':{}}
 
-commoditiesCPR = {'gold':{},'silver':{},'copper':{},'natural gas':{},'Crude Oil WTI':{},'US Cotton #2':{}}
+commoditiesCPR = {'gold':{},'silver':{},'copper':{},'natural gas':{},'Crude Oil WTI':{}}
 
 stocks = {'INFY': {}, 'LT': {}, 'UPL': {},'TATASTEEL':{},'NTPC':{},'TITAN':{},'HDFC':{},'BHARTIARTL':{},
           'BPCL':{},'BAJFINANCE':{},'SUNPHARMA':{},'SBIN':{},'HINDUNILVR':{},'HCLTECH':{},'DLF':{},
@@ -494,7 +494,7 @@ def telegram_bot_sendStocks(bot_message):
 
 def telegram_bot_sendCommodities(bot_message):
     bot_token = '1175180677:AAEFb1hxCYXcQhq0DAiuJcoNfwgbLpT1RdQ'
-    bot_chatID = '-1001495299478'
+    bot_chatID = '-1001285570704'
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message.replace('},','\n\t')
 
     response = requests.get(send_text)
@@ -503,7 +503,7 @@ def telegram_bot_sendCommodities(bot_message):
 
 def telegram_bot_sendMonthlyCommStock(bot_message):
     bot_token = '1175180677:AAEFb1hxCYXcQhq0DAiuJcoNfwgbLpT1RdQ'
-    bot_chatID = '-1001285570704'
+    bot_chatID = '-1001495299478'
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message.replace('},','\n\t')
 
     response = requests.get(send_text)

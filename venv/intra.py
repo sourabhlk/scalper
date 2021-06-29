@@ -126,15 +126,18 @@ def initStocks():
                 prevPrevDayObj = dayWiseData.to_dict('records')[2]
                 prevprevPivot = (prevPrevDayObj['High'] + prevPrevDayObj['Low'] + prevPrevDayObj['Close']) / 3
                 obj = genPivots(prevDayObj,False)
+                if(abs(obj['sPoints']['pivot']-obj['sPoints']['bc'])/obj['sPoints']['pivot'] * 100 > 0.04):
+                    # Get Monthly Pivots
+                    monthlyData = investpy.get_stock_historical_data(stock=stock, country='india', order='descending', interval='Monthly',from_date=start_day_of_prev_month, to_date=current_day).head(2).to_dict('records')[1]
+                    monthlyPivot = genPivots(monthlyData,False)
+                    obj['dPoints'] = {**obj['dPoints'], **{
+                                                           'ms2': monthlyPivot['dPoints']['s2'],
+                                                           'mr2': monthlyPivot['dPoints']['r2']}}
+                    obj['sPoints'] = {**obj['sPoints'], **{'prevprevPivot': prevprevPivot}}
+                    sectorStocks[sector][stock] = obj
+                # else:
+                #     del sectorStocks[sector][stock]
 
-                # Get Monthly Pivots
-                monthlyData = investpy.get_stock_historical_data(stock=stock, country='india', order='descending', interval='Monthly',from_date=start_day_of_prev_month, to_date=current_day).head(2).to_dict('records')[1]
-                monthlyPivot = genPivots(monthlyData,False)
-                obj['dPoints'] = {**obj['dPoints'], **{
-                                                       'ms2': monthlyPivot['dPoints']['s2'],
-                                                       'mr2': monthlyPivot['dPoints']['r2']}}
-                obj['sPoints'] = {**obj['sPoints'], **{'prevprevPivot': prevprevPivot}}
-                sectorStocks[sector][stock] = obj
         print("Init Stocks DOne")
     except Exception as e:
         print("Exception occured in Init" + str(e))
@@ -190,13 +193,15 @@ def initCommodities():
             prevPrevDayObj = dayWiseData.to_dict('records')[2]
             prevprevPivot = (prevPrevDayObj['High'] + prevPrevDayObj['Low'] + prevPrevDayObj['Close']) / 3
             obj = genPivots(prevDayObj,True)
-
-            # Get Monthly Pivots
-            monthlyData = investpy.get_index_historical_data(index=index, country='india', order='descending',interval='Monthly',from_date=start_day_of_prev_month,to_date=current_day).head(2).to_dict('records')[1]
-            monthlyPivot = genPivots(monthlyData,True)
-            obj['dPoints'] = {**obj['dPoints'],**{'monthlyPivot':monthlyPivot['dPoints']['pivot'],'ms2':monthlyPivot['dPoints']['s2'],'mr2':monthlyPivot['dPoints']['r2']}}
-            obj['sPoints'] = {**obj['sPoints'], **{'prevprevPivot': prevprevPivot}}
-            commoditiesCPR[index] = obj
+            if (abs(obj['sPoints']['pivot'] - obj['sPoints']['bc']) / obj['sPoints']['pivot'] * 100 > 0.04):
+                # Get Monthly Pivots
+                monthlyData = investpy.get_index_historical_data(index=index, country='india', order='descending',interval='Monthly',from_date=start_day_of_prev_month,to_date=current_day).head(2).to_dict('records')[1]
+                monthlyPivot = genPivots(monthlyData,True)
+                obj['dPoints'] = {**obj['dPoints'],**{'monthlyPivot':monthlyPivot['dPoints']['pivot'],'ms2':monthlyPivot['dPoints']['s2'],'mr2':monthlyPivot['dPoints']['r2']}}
+                obj['sPoints'] = {**obj['sPoints'], **{'prevprevPivot': prevprevPivot}}
+                commoditiesCPR[index] = obj
+            # else:
+            #     del commoditiesCPR[index]
 
         print("Init Indices DOne")
 
@@ -235,10 +240,10 @@ def runCommodities():
             else:
                 ltp = investpy.get_index_recent_data(index=comm,country='india', order='descending').head(1).to_dict('records')[0]
 
-
-            for pK, pV in value['dPoints'].items():
-                if(pV*1.001 > ltp['Close'] > pV*0.999):
-                    commoditiesToBePosted[comm] = {'ltp': ltp['Close'], pK: pV, 'pivotTrend':'buy' if value['sPoints']['pivot'] > value['sPoints']['prevprevPivot'] else 'sell' ,'openTrend':'buy' if ltp['Open'] > value['sPoints']['pivot'] else 'sell'}
+            if('dPoints' in value):
+                for pK, pV in value['dPoints'].items():
+                    if(pV*1.001 > ltp['Close'] > pV*0.999):
+                        commoditiesToBePosted[comm] = {'ltp': ltp['Close'], pK: pV, 'pivotTrend':'buy' if value['sPoints']['pivot'] > value['sPoints']['prevprevPivot'] else 'sell' ,'openTrend':'buy' if ltp['Open'] > value['sPoints']['pivot'] else 'sell'}
 
 
 
@@ -448,15 +453,16 @@ def liveStock():
             # sectorValue = list(filter(lambda x: x['symbol'] == sector,stockRes['data']))
             for stock,value in sectorStock.items():
                 ltp = investpy.get_stock_recent_data(stock=stock, country='india',order='descending').head(1).to_dict('records')[0]
-                for pK, pV in value['dPoints'].items():
-                    if(pV*1.001 > ltp['Close'] > pV*0.999):
-                        pivotTrend = 'buy' if value['sPoints']['pivot'] > value['sPoints']['prevprevPivot'] else 'sell'
-                        openTrend = 'buy' if ltp['Open'] > value['sPoints']['pivot'] else 'sell'
-                        stocksToBePosted[stock] = {'ltp': ltp['Close'], pK: pV, 'pivotTrend': pivotTrend, 'openTrend': openTrend}
+                if('dPoints' in value):
+                    for pK, pV in value['dPoints'].items():
+                        if(pV*1.001 > ltp['Close'] > pV*0.999):
+                            pivotTrend = 'buy' if value['sPoints']['pivot'] > value['sPoints']['prevprevPivot'] else 'sell'
+                            openTrend = 'buy' if ltp['Open'] > value['sPoints']['pivot'] else 'sell'
+                            stocksToBePosted[stock] = {'ltp': ltp['Close'], pK: pV, 'pivotTrend': pivotTrend, 'openTrend': openTrend}
 
-                stockParams = (
-                    ('symbol', stock),
-                )
+                    stockParams = (
+                        ('symbol', stock),
+                    )
                 # print(stock)
                 # [pcr,volr,volpcr,strikePrices,resdf] = returnDf(stockoptions_url,stockParams)
                 # resDf = resdf[resdf['openInterest_x'] == resdf['openInterest_x'].max()]

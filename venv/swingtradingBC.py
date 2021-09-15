@@ -14,16 +14,39 @@ from pandas.plotting import table
 
 headers = {
     'authority': 'www.nseindia.com',
-    'cache-control': 'max-age=0',
+    'cache-control': 'no-cache',
+    'sec-ch-ua': '"Google Chrome";v="93", " Not;A Brand";v="99", "Chromium";v="93"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Linux"',
     'upgrade-insecure-requests': '1',
-    'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36',
-    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    'sec-fetch-site': 'none',
-    'sec-fetch-mode': 'navigate',
+    'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36',
+    'accept': '*/*',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-mode': 'cors',
     'sec-fetch-user': '?1',
-    'sec-fetch-dest': 'document',
-    'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8'
+    'sec-fetch-dest': 'empty',
+    'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+    'cookie': '_ga=GA1.2.1152348478.1625923328; nsit=Ned4vSsvVZTzRhdRTSVSYvuy; ak_bmsc=73B99C7EC700FFC2FB5EF1DDD4AB8663~000000000000000000000000000000~YAAQS3xBF5W/v3F7AQAAhR4M6A1rfoeoDs63wTDpqCin7esZ1Y8+mQEvyvwSPVVvr4kKwdUe/lsHEwZl0Tq94SL/ag2hAhAUhnMPecI9xFln2qOFeaep9UZ1vfW0ZeXBlebVMC32Q4cCMVk0VqI0GaOaKzxRaY4F0NoMSxcE5WYO4d941bf4AJItgQAInCpdxErf7im7PSPwktzU2NVNQiVQMrMqDnBloccvebeiXKl1WB+ZFM3MV4X2V7yGOLiajW+u1OLTDGGweZ+qn6RRxsuLb69D1F4jtUZbUurmnfy7vKcMiPkLikrS0KaD+CcMzJ7NoZu5s4xwvUQpNekYxCQPkSzgJZthNs3rri3+8Lutm4avRFdztST7L5Ph24lm64F5NTrWWc5scSCuHY9vh2RQcb/g+Ks0IVoR+PIZNiFUZBIz//QHP2N6XbT+Ft1+ibuReZpquHXNeAh99xUVgCYVBfyuhZWMUY926/O62XNOnil3GpuXZ8sxdwJV; _gid=GA1.2.2089804246.1631685714; nseappid=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcGkubnNlIiwiYXVkIjoiYXBpLm5zZSIsImlhdCI6MTYzMTY4NjIxNCwiZXhwIjoxNjMxNjg5ODE0fQ.6di-HcJlhlxfLdfaFOh6zSe1lrSrPKXFOBc7VyNd40A; RT="z=1&dm=nseindia.com&si=d9b5e7b9-8db4-47a1-9a37-772893f4e76c&ss=ktl3jlh4&sl=0&tt=0&bcn=%2F%2F684fc53f.akstat.io%2F"; bm_sv=173DBF06C353D5FCE0E3847D2ADC388E~bOhIvAHQl+3fpIWoMx8kLCF2rIAHkAtCjGNw+qUr3nHWDNH2S7CEGd4xJ5QjHSAm6wObdR7XwvIr/k/UC885uHC+PM9tdkydGrc2WPn3o6RqT2quRvLk8WezRHXk6ZeI3mHlI7iBEMex6bpyn7awAZo2hwrogel5Usf8tm9Zquk=',
+    'referer': 'https://www.nseindia.com/',
+    'if-none-match': 'W/"984-17ba75ff180"',
+    'if-modified-since': 'Thu, 02 Sep 2021 16:38:08 GMT',
+    'Referer': 'https://www.nseindia.com/',
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36',
+    'Origin': 'https://www.nseindia.com',
+    'content-length': '0',
+    'content-type': 'text/plain',
+    'origin': 'https://www.nseindia.com',
+    'Connection': 'keep-alive',
+    'Accept': '*/*',
+    'Sec-Fetch-Site': 'cross-site',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Dest': 'empty',
+    'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
+    'x-client-data': 'CIi2yQEIo7bJAQipncoBCI3RygEIjJ7LAQjv8ssBCLP4ywEInvnLAQj0+csBCKH+ywEIvf7LAQie/8sBCOv/ywE=',
+    'x-requested-with': 'XMLHttpRequest',
+    'pragma': 'no-cache',
 }
+
 
 url_oc = "https://www.nseindia.com/option-chain"
 session = requests.Session()

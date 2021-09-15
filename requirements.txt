@@ -13,7 +13,7 @@ cssselect==1.1.0
 cycler==0.10.0
 decorator==4.4.2
 entrypoints==0.3
-fake-useragent==0.1.11sss
+fake-useragent==0.1.11
 feedparser==6.0.2
 fyers-api==1.0.9
 google-api-core==1.24.1

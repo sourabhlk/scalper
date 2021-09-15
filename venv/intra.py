@@ -19,6 +19,7 @@ from google.oauth2 import service_account
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SERVICE_ACCOUNT_FILE = '/home/iamslk94/keys.json'
+# SERVICE_ACCOUNT_FILE = '/home/sk/keys.json'
 
 credentials = None
 credentials = service_account.Credentials.from_service_account_file(
@@ -79,7 +80,7 @@ sectorStocks = {'NIFTYAUTO': {'BAJA':{},'EXID':{},'BLKI':{},'BFRG':{},'MRTI':{},
 
 indicesCPR = {'Nifty 50':{},'Nifty Bank':{},'Nifty Financial Services':{}}
 
-commoditiesCPR = {'gold':{},'silver':{},'copper':{},'natural gas':{},'Crude Oil WTI':{}}
+commoditiesCPR = {'gold':{},'silver':{},'copper':{},'natural gas':{},'Crude Oil WTI':{},'MCX Zinc':{}}
 
 stocks = {'INFY': {}, 'LT': {}, 'UPL': {},'TATASTEEL':{},'NTPC':{},'TITAN':{},'HDFC':{},'BHARTIARTL':{},
           'BPCL':{},'BAJFINANCE':{},'SUNPHARMA':{},'SBIN':{},'HINDUNILVR':{},'HCLTECH':{},'DLF':{},
@@ -107,6 +108,8 @@ last_day_of_prev_month = date.today().replace(day=1) - timedelta(days=1)
 start_day_of_prev_month = (date.today().replace(day=1) - timedelta(days=last_day_of_prev_month.day)).strftime('%d/%m/%Y')
 
 current_day = date.today().strftime('%d/%m/%Y')
+
+rules = "RULES \n 1) Strictly follow CPR \n 2) Protect your capital - Most Important \n 3) Stay disciplined. \n ------------------------------"
 
 
 
@@ -552,6 +555,9 @@ def main_run(runInfo):
 
 
 if __name__ == '__main__':
+    telegram_bot_sendStocks(rules)
+    telegram_bot_sendCommodities(rules)
+    telegram_bot_sendMonthlyCommStock(rules)
     if(sys.argv[1] == "commodity"):
         initCommodities()
     else:

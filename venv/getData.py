@@ -21,8 +21,13 @@ headers = {
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8'
 }
 
+cookie_dict = {'bm_sv':'E00AA322F8042B10D7A437F6B973463B~y0WJs8fnyYTzZTU3D5+Q29x4zvExTeOuc/N4JRZ9QQAFemDnxfHKULwfxoFgW4N9Me83E/BW3MFhjRGyuWH4dPauW6q2VT69eAkvsWbXEVbZ7o/B1Pz+0fPbxlwWr4Y1vayBzUBIfpIfYdQVjbqXdzp2LSispOvfQszyq/9cnDQ='}
+
 url_oc = "https://www.nseindia.com/option-chain"
 session = requests.Session()
+for cookie in cookie_dict:
+    session.cookies.set(cookie,cookie_dict[cookie])
+
 request = session.get(url_oc, headers=headers, timeout=5)
 cookies = dict(request.cookies)
 
